@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Prints string 10 times via for loop
 for x in $(seq 1 10); do
-		echo Best School
-	done
+	echo Best School
+done
