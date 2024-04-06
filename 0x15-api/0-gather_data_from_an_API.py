@@ -1,16 +1,41 @@
 #!/usr/bin/python3
-"""Gather data from an API"""
+'''Reads todo list from api for employee id passed'''
 
 import requests
-from sys import argv
+import sys
 
-if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    user_id = argv[1]
-    user = requests.get(url + "users/{}".format(user_id)).json()
-    todo = requests.get(url + "todos", params={"userId": user_id}).json()
-    completed = [task for task in todo if task.get("completed") is True]
-    print("Employee {} is done with tasks({}/{}):".format(
-        user.get("name"), len(completed), len(todo)))
-    for task in completed:
-        print("\t {}".format(task.get("title")))
+base_url = 'https://jsonplaceholder.typicode.com/'
+
+
+def do_request():
+    '''Performs request'''
+    if len(sys.argv) < 2:
+        return print('USAGE:', __file__, '<employee id>')
+    eid = sys.argv[1]
+    try:
+        _eid = int(sys.argv[1])
+    except ValueError:
+        return print('Employee id must be an integer')
+
+    response = requests.get(base_url + 'users/' + eid)
+    if response.status_code == 404:
+        return print('User id not found')
+    elif response.status_code != 200:
+        return print('Error: status_code:', response.status_code)
+    user = response.json()
+
+    response = requests.get(base_url + 'todos/')
+    if response.status_code != 200:
+        return print('Error: status_code:', response.status_code)
+    todos = response.json()
+
+    user_todos = [todo for todo in todos
+                  if todo.get('userId') == user.get('id')]
+    completed = [todo for todo in user_todos if todo.get('completed')]
+    print('Employee', user.get('name'),
+          'is done with tasks({}/{}):'.
+          format(len(completed), len(user_todos)))
+    [print('\t', todo.get('title')) for todo in completed]
+
+if __name__ == '__main__':
+    do_request()
