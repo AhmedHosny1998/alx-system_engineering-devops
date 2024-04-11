@@ -16,4 +16,8 @@ def number_of_subscribers(subreddit):
         subscribers = data['data']['subscribers']
         return subscribers
     else:
+<<<<<<< HEAD
         return 0
+=======
+        return 0
+>>>>>>> ab93038321c07954e48e850891adfe6279cb6b64

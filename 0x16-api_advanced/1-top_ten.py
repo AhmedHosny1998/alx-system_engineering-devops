@@ -34,4 +34,8 @@ def top_ten(subreddit):
     results = response.json().get("data")
 
     # Print the titles of the top 10 hottest posts
+<<<<<<< HEAD
     [print(c.get("data").get("title")) for c in results.get("children")]
+=======
+    [print(c.get("data").get("title")) for c in results.get("children")]
+>>>>>>> ab93038321c07954e48e850891adfe6279cb6b64
